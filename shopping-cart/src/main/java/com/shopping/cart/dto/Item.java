@@ -13,4 +13,12 @@ public class Item {
     private Boolean isTaxable;
     private Boolean ownBrand;
     private Double price;
+
+    public Item(Item item) {
+        this.itemName = item.itemName;
+        this.sku = item.sku;
+        this.isTaxable = item.isTaxable;
+        this.ownBrand = item.ownBrand;
+        this.price = item.price;
+    }
 }

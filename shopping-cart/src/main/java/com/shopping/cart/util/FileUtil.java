@@ -19,7 +19,7 @@ public class FileUtil {
                 }
             }
         } catch (Exception e) {
-            throw new Exception("File not Convert");
+            throw new Exception("Error while processing the file conversion");
         }
         return convFile;
     }

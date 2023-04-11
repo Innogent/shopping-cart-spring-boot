@@ -14,6 +14,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -57,14 +58,12 @@ public class ShoppingCartService {
     }
 
     public Receipt calculateTax(MultipartFile multipartFile) throws Exception {
-
         Cart cart = mapToCart(FileUtil.convert(multipartFile));
         Double subTotal = calculateSum(cart.getItems());
         Double taxableSubTotal = calculateTaxableSubTotal(cart.getItems());
         Double taxTotal = TAX_RATE * taxableSubTotal;
         Double grandTotal = subTotal + taxTotal;
         return new Receipt(subTotal, taxableSubTotal, taxTotal, grandTotal);
-
     }
 
     public Receipt applyDiscount(MultipartFile cartFile, MultipartFile couponFile) throws Exception {
@@ -74,18 +73,22 @@ public class ShoppingCartService {
         CouponRequestWrapper couponRequest = mapper.readValue(FileUtil.convert(couponFile), CouponRequestWrapper.class);
         Map<Long, Double> couponDetails = couponRequest.getCoupons().stream().collect(Collectors.toMap(t -> t.getAppliedSku(), t -> t.getDiscountPrice()));
         Double subTotalBeforeDiscounts = calculateSum(cart.getItems());
-        final Double[] discountTotal = {0.0};
-        cart.getItems().stream().forEach(item -> {
-            if (couponDetails.containsKey(item.getSku())) {
-                item.setPrice(item.getPrice() - couponDetails.get(item.getSku()));
-                discountTotal[0] += couponDetails.get(item.getSku());
-            }
 
-        });
-        Double subTotalAfterDiscounts = subTotalBeforeDiscounts - discountTotal[0];
-        Double taxableSubTotal = calculateTaxableSubTotal(cart.getItems());
+        List<Item> itemsAfterDiscountApplied = new ArrayList<>();
+        Double discountTotal = 0.0;
+        for(Item item : cart.getItems()) {
+            Item itemAfterDiscount = new Item(item);
+            if (couponDetails.containsKey(item.getSku())) {
+                itemAfterDiscount.setPrice(item.getPrice() - couponDetails.get(item.getSku()));
+                discountTotal += couponDetails.get(item.getSku());
+            }
+            itemsAfterDiscountApplied.add(itemAfterDiscount);
+        }
+
+        Double subTotalAfterDiscounts = subTotalBeforeDiscounts - discountTotal;
+        Double taxableSubTotal = calculateTaxableSubTotal(itemsAfterDiscountApplied);
         Double taxTotal = TAX_RATE * taxableSubTotal;
-        Double grandTotal = subTotalBeforeDiscounts + taxTotal;
-        return new Receipt(subTotalBeforeDiscounts, discountTotal[0], subTotalAfterDiscounts, taxableSubTotal, taxTotal, grandTotal);
+        Double grandTotal = subTotalAfterDiscounts + taxTotal;
+        return new Receipt(subTotalBeforeDiscounts, discountTotal, subTotalAfterDiscounts, taxableSubTotal, taxTotal, grandTotal);
     }
 }
