@@ -62,12 +62,11 @@ public class ShoppingCartController {
         }
     }
 
-    @PostMapping("/apply-discount")
+    @PostMapping("/receipt")
     public ResponseEntity<Receipt> applyDiscount(
-            @RequestParam(name = "cart") MultipartFile cartFile,
-            @RequestParam(name = "coupons") MultipartFile couponsFile) {
+            @RequestParam(name = "cart") MultipartFile cartFile) {
         try {
-            Receipt receipt = shoppingCartService.applyDiscount(cartFile, couponsFile);
+            Receipt receipt = shoppingCartService.applyDiscount(cartFile);
             logger.info("Receipt for shopping : {} ", receipt);
             return ResponseEntity.status(HttpStatus.OK).body(receipt);
         } catch (Exception e) {

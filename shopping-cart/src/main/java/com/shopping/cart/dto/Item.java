@@ -4,6 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -12,7 +14,7 @@ public class Item {
     private Long sku;
     private Boolean isTaxable;
     private Boolean ownBrand;
-    private Double price;
+    private BigDecimal price;
 
     public Item(Item item) {
         this.itemName = item.itemName;

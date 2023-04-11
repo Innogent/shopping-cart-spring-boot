@@ -1,0 +1,41 @@
+{
+	"info": {
+		"_postman_id": "abb7e2ba-661d-4328-ab68-292b7c858331",
+		"name": "Shopping Cart",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "18431548"
+	},
+	"item": [
+		{
+			"name": "Receipt",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "cart",
+							"type": "file",
+							"src": "/home/rachana/Downloads/cart.json"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/cart/receipt",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"cart",
+						"receipt"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

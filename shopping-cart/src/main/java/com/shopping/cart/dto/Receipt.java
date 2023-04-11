@@ -7,6 +7,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -14,31 +16,31 @@ import lombok.NoArgsConstructor;
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 public class Receipt {
 
-    private Double subTotal;
+    private BigDecimal subTotal;
 
-    private Double discountTotal;
+    private BigDecimal discountTotal;
 
-    private Double subTotalAfterDiscount;
+    private BigDecimal subTotalAfterDiscount;
 
-    private Double taxableSubTotal;
+    private BigDecimal taxableSubTotal;
 
-    private Double taxTotal;
+    private BigDecimal taxTotal;
 
-    private Double grandTotal;
+    private BigDecimal grandTotal;
 
-    public Receipt(Double grandTotal) {
+    public Receipt(BigDecimal grandTotal) {
         super();
         this.grandTotal = grandTotal;
     }
 
-    public Receipt(Double subTotal, Double taxTotal, Double grandTotal) {
+    public Receipt(BigDecimal subTotal, BigDecimal taxTotal, BigDecimal grandTotal) {
         super();
         this.subTotal = subTotal;
         this.taxTotal = taxTotal;
         this.grandTotal = grandTotal;
     }
 
-    public Receipt(Double subTotal, Double taxableSubTotal, Double taxTotal, Double grandTotal) {
+    public Receipt(BigDecimal subTotal, BigDecimal taxableSubTotal, BigDecimal taxTotal, BigDecimal grandTotal) {
         super();
         this.subTotal = subTotal;
         this.taxableSubTotal = taxableSubTotal;
